@@ -1,0 +1,12 @@
+-- 1) Составьте список пользователей users, которые осуществили хотя бы один заказ orders в интернет магазине.
+
+select name from users u where exists (select 1 from orders where user_id = u.id);
+
+-- 2) Выведите список товаров products и разделов catalogs, который соответствует товару.
+
+select
+	p.name,
+	c.name
+from product p 
+inner join catalogs c
+on c.id = p.catalog_id;
