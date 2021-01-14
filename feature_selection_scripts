@@ -1,0 +1,28 @@
+
+/*Найти заказчиков и обслуживающих их заказы сотрудников таких, что и заказчики и сотрудники из одного города, 
+а доставка идёт конкретной компанией. Вывести компанию заказчика и ФИО сотрудника.*/
+
+SELECT c.company_name, CONCAT(e.first_name, ' ', e.last_name) AS name_employee
+FROM orders AS o
+JOIN customers AS c USING (customer_id)
+JOIN employees AS e USING (employee_id)
+JOIN shippers AS s ON o.ship_via = s.shipper_id
+WHERE c.city = 'London' AND e.city = 'London' AND s.company_name = 'Federal Shipping';
+
+/*Найти активные продукты из категории Beverages и Seafood, которых в продаже менее 20 единиц. 
+Вывести наименование продуктов, кол-во единиц в продаже, имя контакта поставщика и его телефонный номер.*/
+
+SELECT product_name, units_in_stock, contact_name, phone
+FROM products
+JOIN categories USING (category_id)
+JOIN suppliers USING (supplier_id)
+WHERE category_name IN ('Beverages', 'Seafood') AND discontinued = 0 AND units_in_stock < 20
+ORDER BY units_in_stock;
+
+/*Найти заказчиков, не сделавших ни одного заказа. Вывести имя заказчика.*/
+
+SELECT contact_name
+FROM customers
+LEFT JOIN orders USING (customer_id)
+WHERE order_id IS NULL
+ORDER BY contact_name;

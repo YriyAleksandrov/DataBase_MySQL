@@ -1,0 +1,26 @@
+-- представления
+
+CREATE OR REPLACE VIEW v_orders_customers_employees
+AS
+SELECT order_date, required_date, shipped_date, ship_postal_code,
+ship_country, company_name, contact_name, phone, customers.postal_code,
+last_name, first_name, title, reports_to
+FROM orders
+JOIN customers USING (customer_id)
+JOIN employees USING (employee_id);
+
+SELECT * FROM v_orders_customers_employees
+WHERE order_date > '1997-01-01';
+
+-- ---
+
+CREATE OR REPLACE VIEW v_active_products
+AS
+SELECT * 
+FROM products
+WHERE discontinued <> 1
+WITH LOCAL CHECK OPTION;
+
+INSERT INTO v_active_products 
+values(79, 'abc', 1, 1, 'abc', 1, 1, 1, 1, 1); 		-- с последней 1 выдает ошибку
+-- values(79, 'abc', 1, 1, 'abc', 1, 1, 1, 1, 0);  	-- если поставить 0, то инсерт пройдет
